@@ -1,0 +1,13 @@
+set editing-mode vi
+set keymap vi-command
+set keymap vi-insert
+
+set show-all-if-ambiguous on
+
+set completion-ignore-case on
+
+"\e\e[A": history-search-backward
+"\e\e[B": history-search-forward
+
+"\e\e[A": history-search-backward
+"\e\e[B": history-search-forward
