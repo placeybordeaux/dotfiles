@@ -1,4 +1,5 @@
 
+set clipboard=unnamedplus
 if &compatible
  set nocompatible
 endif
@@ -10,6 +11,15 @@ if dein#load_state('~/.cache/dein')
 
  call dein#add('~/.cache/dein')
  call dein#add('kassio/neoterm')
+ call dein#add('tpope/vim-fugitive')
+ call dein#add('scrooloose/nerdtree')
+ call dein#add('vim-scripts/xoria256.vim')
+ call dein#add('altercation/vim-colors-solarized')
+ call dein#add('nightsense/snow')
+ call dein#add('vim-airline/vim-airline')
+ call dein#add('vim-airline/vim-airline-themes')
+ call dein#add('NLKNguyen/papercolor-theme')
+ call dein#add('motus/pig.vim')
  call dein#end()
  call dein#save_state()
 endif
@@ -26,8 +36,6 @@ set tabstop=2
 " auto reload files
 set autoread 
 au CursorHold * checktime  
-
-set clipboard=unnamed
 
 set mouse=a
 
@@ -54,6 +62,7 @@ set title
 autocmd BufEnter * let &titlestring = expand("%:t")
 
 command Date :read !date
+nmap <F6> 1g?}<CR>V%yGGo<ESC>:read !date<CR>p
 
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 " easier copy and paste
@@ -80,6 +89,8 @@ tnoremap <A-p> <C-\><C-n> :bp<CR>
 nnoremap <A-n> :bn<CR>
 nnoremap <A-p> :bp<CR>
 
+let g:neoterm_default_mod = 'belowright'
+let g:neoterm_autoscroll = 1
 let g:terminal_scrollback_buffer_size=1000000
 " for moving around
 tnoremap <A-h> <C-\><C-n><C-w>h
@@ -100,17 +111,18 @@ inoremap <A-.> <Esc>gt
 
 inoremap <C-BS> <Esc>dbi
 
+nnoremap <f12> :set scrollback=100<CR>:sleep 1<CR>:set scrollback=10000<CR>
+
 autocmd BufWinEnter,WinEnter term://* startinsert
 autocmd BufLeave term://* stopinsert
 
-" For neoterm
-let g:neoterm_position = 'horizontal'
-let g:neoterm_automap_keys = ',tt'
-
+nnoremap <silent> <f7> Vi`:TREPLSendSelection<cr>
 vnoremap <silent> <f8> Vi{jOk:TREPLSend<cr>
 nnoremap <silent> <f8> Vi{jOk:TREPLSend<cr>
 nnoremap <silent> <f9> :TREPLSendLine<cr>
 vnoremap <silent> <f9> :TREPLSendSelection<cr>
+
+nnoremap U :redo<CR>
 
 " Switch on filetype detection and loads 
 " indent file (indent.vim) for specific file types
@@ -147,27 +159,32 @@ let g:NERDTreeMapPreview="<F4>"
 " " Clear filetype flags before changing runtimepath to force Vim to reload
 " them.
 " golang stuff
-colorscheme xoria256
 
 
 ""might be defunct
 if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" || $TERM == "xterm-color"
   set t_Co=256
   set termguicolors
-  let g:terminal_color_0  = '#2e3436'
-  let g:terminal_color_1  = '#cc0000'
-  let g:terminal_color_2  = '#4e9a06'
-  let g:terminal_color_3  = '#c4a000'
-  let g:terminal_color_4  = '#3465a4'
-  let g:terminal_color_5  = '#75507b'
-  let g:terminal_color_6  = '#0b939b'
-  let g:terminal_color_7  = '#d3d7cf'
-  let g:terminal_color_8  = '#555753'
-  let g:terminal_color_9  = '#ef2929'
-  let g:terminal_color_10 = '#8ae234'
-  let g:terminal_color_11 = '#fce94f'
-  let g:terminal_color_12 = '#729fcf'
-  let g:terminal_color_13 = '#ad7fa8'
-  let g:terminal_color_14 = '#00f5e9'
-  let g:terminal_color_15 = '#eeeeec'
+  ""let g:terminal_color_0  = '#2e3436'
+  ""let g:terminal_color_1  = '#cc0000'
+  ""let g:terminal_color_2  = '#4e9a06'
+  ""let g:terminal_color_3  = '#c4a000'
+  ""let g:terminal_color_4  = '#3465a4'
+  ""let g:terminal_color_5  = '#75507b'
+  ""let g:terminal_color_6  = '#0b939b'
+  ""let g:terminal_color_7  = '#d3d7cf'
+  ""let g:terminal_color_8  = '#555753'
+  ""let g:terminal_color_9  = '#ef2929'
+  ""let g:terminal_color_10 = '#8ae234'
+  ""let g:terminal_color_11 = '#fce94f'
+  ""let g:terminal_color_12 = '#729fcf'
+  ""let g:terminal_color_13 = '#ad7fa8'
+  ""let g:terminal_color_14 = '#00f5e9'
+  ""let g:terminal_color_15 = '#eeeeec'
 endif
+
+set termguicolors
+set t_Co=256
+set background=dark
+colorscheme PaperColor
+call togglebg#map("<F5>")

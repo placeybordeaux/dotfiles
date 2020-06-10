@@ -9,8 +9,3 @@ import shellSession._
 import ammonite.ops._
 import ammonite.shell._
 ammonite.shell.Configure(interp,repl, wd)
-
-import coursier._
-import coursier.ivy.IvyRepository
-
-
