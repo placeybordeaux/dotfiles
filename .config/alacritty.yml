@@ -1,0 +1,4 @@
+shell:
+  program: /run/current-system/sw/bin/nvim
+  args: 
+    ["term:///home/peter/.nix-profile/bin/zsh"]
