@@ -1,0 +1,23 @@
+Things still need configuring
+
+# nvim
+Config is just placed as a dot file, might be nice to move that
+dein is not installed (see https://github.com/Shougo/dein.vim)
+need to call `:call dein#install()`
+Colors are not installed
+
+# zsh
+
+Missing a bunch of stuff
+
+```
+/home/peter/.zshrc:.:2: no such file or directory: /home/peter/.indeedrc
+/home/peter/.zshrc:.:3: no such file or directory: /home/peter/.profile
+/home/peter/.zshrc:.:9: no such file or directory: /home/placey/.nix-profile/etc/profile.d/nix.sh
+/home/peter/.zshrc:.:12: no such file or directory: /home/peter/.cargo/env
+/home/peter/.zshrc:.:16: no such file or directory: /home/peter/.profile
+/home/peter/.zshrc:source:56: no such file or directory: /home/placey/.oh-my-zsh/oh-my-zsh.sh
+nixos% ls
+ammonite  inputrc  nix-pkgs  vim  zshrc
+nixos% 
+```
