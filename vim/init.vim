@@ -20,6 +20,7 @@ if dein#load_state('~/.cache/dein')
  call dein#add('vim-airline/vim-airline-themes')
  call dein#add('NLKNguyen/papercolor-theme')
  call dein#add('motus/pig.vim')
+ call dein#add('preservim/nerdtree')
  call dein#end()
  call dein#save_state()
 endif
