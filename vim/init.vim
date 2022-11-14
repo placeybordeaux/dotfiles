@@ -4,12 +4,12 @@ if &compatible
  set nocompatible
 endif
 " Add the dein installation directory into runtimepath
-set runtimepath+=~/.cache/dein/repos/github.com/Shougo/dein.vim
+set runtimepath+=~/.local/share/dein/repos/github.com/Shougo/dein.vim
 
 if dein#load_state('~/.cache/dein')
  call dein#begin('~/.cache/dein')
 
- call dein#add('~/.cache/dein')
+ call dein#add('~/.cache/dein/repos/github.com/Shougo/dein.vim')
  call dein#add('kassio/neoterm')
  call dein#add('tpope/vim-fugitive')
  call dein#add('scrooloose/nerdtree')
@@ -21,6 +21,12 @@ if dein#load_state('~/.cache/dein')
  call dein#add('NLKNguyen/papercolor-theme')
  call dein#add('motus/pig.vim')
  call dein#add('preservim/nerdtree')
+
+ " language support stuff
+ "
+ call dein#add('udalov/kotlin-vim')
+ call dein#add('fatih/vim-go')
+ call dein#add('neovim/nvim-lspconfig')
  call dein#end()
  call dein#save_state()
 endif
@@ -34,10 +40,62 @@ set shiftwidth=2
 set softtabstop=2 expandtab
 set tabstop=2
 
+" Go stuff
+let g:go_fmt_command = "goimports"    
+let g:go_auto_type_info = 1   
+
+" more LSP stuff
+lua << EOF
+-- Mappings.
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local opts = { noremap=true, silent=true }
+vim.api.nvim_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.api.nvim_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+vim.api.nvim_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+vim.api.nvim_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'kotlin_language_server', 'intelephense'}
+for _, lsp in pairs(servers) do
+  require('lspconfig')[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
+end
+EOF
+
 " auto reload files
 set autoread 
 au CursorHold * checktime  
 
+"Enable mouse
 set mouse=a
 
 " for setting buffer name to termtitle
@@ -62,8 +120,8 @@ augroup END
 set title
 autocmd BufEnter * let &titlestring = expand("%:t")
 
+" for note taking
 command Date :read !date
-nmap <F6> 1g?}<CR>V%yGGo<ESC>:read !date<CR>p
 
 nnoremap <F2> :set nonumber!<CR>:set foldcolumn=0<CR>
 " easier copy and paste
@@ -82,6 +140,8 @@ tnoremap <C-S-s> <C-\><C-n>:vs<CR><C-\><C-n>:term<CR>
 " to avoid <Esc>
 imap asdf <Esc>
 tnoremap asdf <C-\><C-n>
+
+" To clear highlighting easily
 nnoremap <CR> :noh<CR><CR>
 
 " For buffer switching
@@ -122,6 +182,7 @@ vnoremap <silent> <f8> Vi{jOk:TREPLSend<cr>
 nnoremap <silent> <f8> Vi{jOk:TREPLSend<cr>
 nnoremap <silent> <f9> :TREPLSendLine<cr>
 vnoremap <silent> <f9> :TREPLSendSelection<cr>
+nnoremap <silent> <C-CR> :TREPLSendLine<cr>
 
 nnoremap U :redo<CR>
 
@@ -162,30 +223,5 @@ let g:NERDTreeMapPreview="<F4>"
 " golang stuff
 
 
-""might be defunct
-if $TERM == "xterm-256color" || $TERM == "screen-256color" || $COLORTERM == "gnome-terminal" || $TERM == "xterm-color"
-  set t_Co=256
-  set termguicolors
-  ""let g:terminal_color_0  = '#2e3436'
-  ""let g:terminal_color_1  = '#cc0000'
-  ""let g:terminal_color_2  = '#4e9a06'
-  ""let g:terminal_color_3  = '#c4a000'
-  ""let g:terminal_color_4  = '#3465a4'
-  ""let g:terminal_color_5  = '#75507b'
-  ""let g:terminal_color_6  = '#0b939b'
-  ""let g:terminal_color_7  = '#d3d7cf'
-  ""let g:terminal_color_8  = '#555753'
-  ""let g:terminal_color_9  = '#ef2929'
-  ""let g:terminal_color_10 = '#8ae234'
-  ""let g:terminal_color_11 = '#fce94f'
-  ""let g:terminal_color_12 = '#729fcf'
-  ""let g:terminal_color_13 = '#ad7fa8'
-  ""let g:terminal_color_14 = '#00f5e9'
-  ""let g:terminal_color_15 = '#eeeeec'
-endif
-
-set termguicolors
-set t_Co=256
-set background=dark
 colorscheme PaperColor
 call togglebg#map("<F5>")

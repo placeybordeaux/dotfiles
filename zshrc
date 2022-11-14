@@ -1,14 +1,7 @@
 EDITOR="vim"
 export RIPGREP_CONFIG_PATH=$HOME/.ripgreprc
 
-PATH=$HOME/.cargo/bin:$PATH
-if [ -f $HOME/.cargo/env ]; then
-  . $HOME/.cargo/env
-fi
-
-alias counts="sort | uniq -c | sort -n"
-alias stats="Rscript -e 'summary (as.numeric (readLines (\"stdin\")))'"
-alias nix-update="nix-channel --update && nix-env -u"
+source $HOME/.profile
 
 export LC_ALL=en_US.utf-8 
 export LANG="$LC_ALL" 
@@ -21,6 +14,9 @@ ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 ZSH_THEME="imajes"
 
+alias counts="sort | uniq -c | sort -n"
+alias stats="Rscript -e 'summary (as.numeric (readLines (\"stdin\")))'"
+alias nix-update="nix-channel --update && nix-env -u"
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -36,8 +32,6 @@ chpwd_functions+=( neovim_autocd )
 
 # User configuration
 
-export PATH=$HOME/.local/bin:/usr/local/go/bin:$GOPATH/bin:$HOME/bin:/usr/local/bin:$PATH
-# added by Anaconda2 4.2.0 installer
 
 export GOPATH=$HOME/code/go
 export PATH=$PATH:$GOPATH/bin:$HOME/bin
